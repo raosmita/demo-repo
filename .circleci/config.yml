@@ -1,30 +1,25 @@
-version: 2.1
-orbs: 
-  slack: circleci/slack@4.9.3
-  jobs:
-  notify:
-    docker:
-      - image: 'cimg/base:stable'
+ersion: 2.1
+orbs:
+  node: circleci/node@3.0.0
+  slack: circleci/slack@3.4.2
+jobs:
+  build-test-and-notify:
+    executor:
+      name: node/default
     steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run: npm test
       - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: always
+          color: "#42e2f4"
+          mentions: "yemiwebby,"
+          message: A custom message to notify the channel about the latest build
+      - slack/status:
+          fail_only: true
+          mentions: "yemiwebby"
 workflows:
-  send-notification:
+  build-and-notify:
     jobs:
-      - notify:
-          context: slack-secrets
+      - build-test-and-notify
