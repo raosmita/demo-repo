@@ -1,14 +1,34 @@
+
 version: '2.1'
 orbs:
   slack: circleci/slack@4.1
 jobs:
-  example-job:
+  notify:
     docker:
-      # replace with your preferred image
-      - image: cimg/base:stable
+      - image: 'cimg/base:stable'
     steps:
-      - slack/notify
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
+         
+         
+    
+    
 workflows:
   example-workflow:
     jobs:
-      - example-job
+      - notify
