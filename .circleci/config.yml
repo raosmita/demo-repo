@@ -7,11 +7,9 @@ jobs:
     executor:
       name: node/default
     steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: npm install
-      - run: npm test
+    
+      
+     
       - slack/notify:
           color: "#42e2f4"
           mentions: "yemiwebby,"
